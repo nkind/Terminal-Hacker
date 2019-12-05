@@ -1,9 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Hacker : MonoBehaviour
 {
+    // Game state
+    int _level;
+    enum Screen { MainMenu, Password, Win};
+    Screen _currentScreen;
+
     void Start()
     {
         ShowMainMenu();
@@ -12,6 +18,7 @@ public class Hacker : MonoBehaviour
 
     void ShowMainMenu()
     {
+        _currentScreen = Screen.MainMenu;
         Terminal.WriteLine("Totally Accurate Hacking Simulation\n" +
             "---------------------------------------\n" +
             "Pick your poison:\n" +
@@ -24,10 +31,30 @@ public class Hacker : MonoBehaviour
 
     void OnUserInput(string input)
     {
-        if (input == "menu")
+        if (input == "menu") // can always go direct to main menu 
         {
-            Terminal.ClearScreen();
             ShowMainMenu();
+        }
+        else if (_currentScreen == Screen.MainMenu)
+        {
+            RunMainMenu(input);
+        }
+
+    }
+
+    void RunMainMenu(string input)
+    {
+        if (input == "1")
+        {
+            _level = 1;
+            _currentScreen = Screen.Password;
+            StartGame();
+        }
+        else if (input == "2")
+        {
+            _level = 2;
+            _currentScreen = Screen.Password;
+            StartGame();
         }
         else if (input == "beans")
         {
@@ -39,4 +66,8 @@ public class Hacker : MonoBehaviour
         }
     }
 
+    void StartGame()
+    {
+        Terminal.WriteLine("You have chosen level " + _level);
+    }
 }
