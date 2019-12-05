@@ -9,6 +9,9 @@ public class Hacker : MonoBehaviour
     int _level;
     enum Screen { MainMenu, Password, Win};
     Screen _currentScreen;
+    string _easy = "Java";
+    string _medium = "Grades";
+
 
     void Start()
     {
@@ -39,6 +42,10 @@ public class Hacker : MonoBehaviour
         {
             RunMainMenu(input);
         }
+        else if (_currentScreen == Screen.Password)
+        {
+            RunGame(input);
+        }
 
     }
 
@@ -48,13 +55,15 @@ public class Hacker : MonoBehaviour
         {
             _level = 1;
             _currentScreen = Screen.Password;
-            StartGame();
+            Terminal.WriteLine("Enter Password: ");
+
         }
         else if (input == "2")
         {
             _level = 2;
             _currentScreen = Screen.Password;
-            StartGame();
+            Terminal.WriteLine("Enter Password: ");
+            
         }
         else if (input == "beans")
         {
@@ -66,8 +75,31 @@ public class Hacker : MonoBehaviour
         }
     }
 
-    void StartGame()
+    void RunGame(String input)
     {
-        Terminal.WriteLine("You have chosen level " + _level);
+        if (_level == 1)
+        {
+            if (input == _easy)
+            {
+                Terminal.WriteLine("You did a hack! The police are on their way...");
+            }
+            else
+            {
+                Terminal.WriteLine("Try again.");
+            }
+        }
+        else if (_level == 2)
+        {
+            if (input == _medium)
+            {
+                Terminal.WriteLine("You did a hack! The police are on their way...");
+            }
+            else
+            {
+                Terminal.WriteLine("Try again.");
+            }
+        }
     }
+
+   
 }
