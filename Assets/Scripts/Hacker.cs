@@ -60,6 +60,11 @@ public class Hacker : MonoBehaviour
             _level = int.Parse(input);
             PromptPassword();
         }
+        else if (input == "quit" || input == "close" || input == "exit")
+        {
+            Terminal.WriteLine("If on web close the tab.");
+            Application.Quit();
+        }
         else if (input == "beans") // easter egg
         {
             Terminal.WriteLine("How dare you...");
