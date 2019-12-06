@@ -3,6 +3,7 @@
 public class Hacker : MonoBehaviour
 {
     // Game config data
+    const string _menuTip = "Type menu to return to main menu."; 
     string[] _easy = { "java", "mocha", "latte", "coffee", "beans" };
     string[] _medium = { "grade", "teach", "learn", "finals", "educate" };
     string[] _hard = { "arrivals", "delay", "take-off", "security", "landing" };
@@ -10,7 +11,7 @@ public class Hacker : MonoBehaviour
 
     // Game state
     int _level;
-    enum Screen { MainMenu, Password, Win};
+    enum Screen { MainMenu, Password, Win };
     Screen _currentScreen;
     string _password;
  
@@ -53,11 +54,11 @@ public class Hacker : MonoBehaviour
 
     void RunMainMenu(string input)
     {
-        bool isValidLevel = (input == "1" || input == "2");
+        bool isValidLevel = (input == "1" || input == "2" || input == "3");
         if (isValidLevel)
         {
             _level = int.Parse(input);
-            StartGame();
+            PromptPassword();
         }
         else if (input == "beans") // easter egg
         {
@@ -66,13 +67,22 @@ public class Hacker : MonoBehaviour
         else
         {
             Terminal.WriteLine("Invalid input!");
+            Terminal.WriteLine(_menuTip);
         }
     }
 
-    void StartGame()
+    void PromptPassword()
     {
         _currentScreen = Screen.Password;
         Terminal.ClearScreen();
+        SetRandomPassword();
+        Terminal.WriteLine("Enter your password, hint: " + _password.Anagram());
+        Terminal.WriteLine(_menuTip);
+
+    }
+
+    void SetRandomPassword()
+    {
         switch (_level)
         {
             case 1:
@@ -88,7 +98,6 @@ public class Hacker : MonoBehaviour
                 Debug.LogError("Invalid input");
                 break;
         }
-        Terminal.WriteLine("Enter your password: ");
     }
 
     void RunGame(string input)
@@ -109,6 +118,8 @@ public class Hacker : MonoBehaviour
         _currentScreen = Screen.Win;
         Terminal.ClearScreen();
         ShowLevelReward();
+        Terminal.WriteLine(_menuTip);
+
     }
 
     void ShowLevelReward()
@@ -132,6 +143,19 @@ public class Hacker : MonoBehaviour
   / ------- /
  / ------- /
 /_________/
+"
+                );
+                break;
+            case 3:
+                Terminal.WriteLine("Free vacation!");
+                Terminal.WriteLine(@"
+          00
+00        000
+ 000      0000
+  000000000000000000
+ 000      0000
+00        000
+          00
 "
                 );
                 break;
