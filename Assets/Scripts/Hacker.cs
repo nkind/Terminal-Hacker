@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Hacker : MonoBehaviour
 {
+    // Game config data
+    string[] _easy = { "java", "mocha", "latte", "coffee", "beans" };
+    string[] _medium = { "grade", "teach", "learn", "finals", "educate" };
+    string[] _hard = { "arrivals", "delay", "take-off", "security", "landing" };
+
+
     // Game state
     int _level;
     enum Screen { MainMenu, Password, Win};
     Screen _currentScreen;
-    string _easy = "Java";
-    string _medium = "Grades";
+    string _password;
+ 
 
 
     void Start()
     {
         ShowMainMenu();
-        
     }
 
     void ShowMainMenu()
@@ -51,21 +53,13 @@ public class Hacker : MonoBehaviour
 
     void RunMainMenu(string input)
     {
-        if (input == "1")
+        bool isValidLevel = (input == "1" || input == "2");
+        if (isValidLevel)
         {
-            _level = 1;
-            _currentScreen = Screen.Password;
-            Terminal.WriteLine("Enter Password: ");
-
+            _level = int.Parse(input);
+            StartGame();
         }
-        else if (input == "2")
-        {
-            _level = 2;
-            _currentScreen = Screen.Password;
-            Terminal.WriteLine("Enter Password: ");
-            
-        }
-        else if (input == "beans")
+        else if (input == "beans") // easter egg
         {
             Terminal.WriteLine("How dare you...");
         }
@@ -75,31 +69,75 @@ public class Hacker : MonoBehaviour
         }
     }
 
-    void RunGame(String input)
+    void StartGame()
     {
-        if (_level == 1)
+        _currentScreen = Screen.Password;
+        Terminal.ClearScreen();
+        switch (_level)
         {
-            if (input == _easy)
-            {
-                Terminal.WriteLine("You did a hack! The police are on their way...");
-            }
-            else
-            {
-                Terminal.WriteLine("Try again.");
-            }
+            case 1:
+                _password = _easy[Random.Range(0, _easy.Length)];
+                break;
+            case 2:
+                _password = _medium[Random.Range(0, _medium.Length)];
+                break;
+            case 3:
+                _password = _hard[Random.Range(0, _hard.Length)];
+                break;
+            default:
+                Debug.LogError("Invalid input");
+                break;
         }
-        else if (_level == 2)
+        Terminal.WriteLine("Enter your password: ");
+    }
+
+    void RunGame(string input)
+    {
+        
+        if (input == _password)
         {
-            if (input == _medium)
-            {
-                Terminal.WriteLine("You did a hack! The police are on their way...");
-            }
-            else
-            {
-                Terminal.WriteLine("Try again.");
-            }
+            WinScreen();
+        }
+        else
+        {
+            Terminal.WriteLine("Wrong password! Step it up!");
         }
     }
 
-   
+    void WinScreen()
+    {
+        _currentScreen = Screen.Win;
+        Terminal.ClearScreen();
+        ShowLevelReward();
+    }
+
+    void ShowLevelReward()
+    {
+        switch (_level)
+        {
+            case 1:
+                Terminal.WriteLine("mmm... digital coffee");
+                Terminal.WriteLine(@"
+       ))
+      ((
+    c[__]
+"
+                );
+                break;
+            case 2:
+                Terminal.WriteLine("You hacked your way to a degree!");
+                Terminal.WriteLine(@"
+    __________
+   / ------- /
+  / ------- /
+ / ------- /
+/_________/
+"
+                );
+                break;
+            default:
+                Debug.LogError("Invalid State");
+                break;
+        }
+    }
 }
